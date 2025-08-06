@@ -29,7 +29,6 @@ public sealed class ClientAlertsSystem : AlertsSystem
         SubscribeLocalEvent<AlertsComponent, LocalPlayerDetachedEvent>(OnPlayerDetached);
 
         SubscribeLocalEvent<AlertsComponent, ComponentHandleState>(OnHandleState); // what the fuck
-        SubscribeLocalEvent<AlertsComponent, AfterAutoHandleStateEvent>(ClientAlertsHandleState);
     }
     protected override void LoadPrototypes()
     {
