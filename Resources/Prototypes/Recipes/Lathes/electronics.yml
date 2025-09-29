@@ -431,11 +431,6 @@
 
 - type: latheRecipe
   parent: BaseCircuitboardRecipe
-  id: PowerComputerCircuitboard
-  result: PowerComputerCircuitboard
-
-- type: latheRecipe
-  parent: BaseCircuitboardRecipe
   id: AlertsComputerCircuitboard
   result: AlertsComputerCircuitboard
 
@@ -606,12 +601,6 @@
 
 - type: latheRecipe
   parent: BaseGoldCircuitboardRecipe
-  id: StationAnchorCircuitboard
-  result: StationAnchorCircuitboard
-  completetime: 8
-
-- type: latheRecipe
-  parent: BaseGoldCircuitboardRecipe
   id: ReagentGrinderIndustrialMachineCircuitboard
   result: ReagentGrinderIndustrialMachineCircuitboard
 
@@ -624,6 +613,11 @@
   parent: BaseCircuitboardRecipe
   id: CutterMachineCircuitboard
   result: CutterMachineCircuitboard
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: HolopadMachineCircuitboard
+  result: HolopadMachineCircuitboard
 
 - type: latheRecipe
   parent: BaseGoldCircuitboardRecipe
