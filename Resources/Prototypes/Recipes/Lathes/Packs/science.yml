@@ -109,6 +109,7 @@
   - APECircuitboard
   - ArtifactAnalyzerMachineCircuitboard
   - ArtifactCrusherMachineCircuitboard
+  - MachineBluespaceHarvesterCircuitboard # fucking harvestor
   # EE EDIT START
   - MetempsychoticMachineCircuitboard
   - BaseComputerModularCircuitBoard

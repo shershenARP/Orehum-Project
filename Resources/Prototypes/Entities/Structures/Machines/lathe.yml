@@ -225,9 +225,6 @@
     - Parts
     - Translator
     # EE EDIT END
-    dynamicRecipes:
-    - ClothingEyesMinerVisionGoggles # Orehum
-    - ClothingEyesMesonVisionGoggles # Orehum
   - type: EmagLatheRecipes
     emagDynamicPacks:
     - SecurityAmmo
@@ -285,8 +282,6 @@
     - CameraBoards
     - MechBoards
     - ShuttleBoards
-    dynamicRecipes:
-    - MachineBluespaceHarvesterCircuitboard
   - type: EmagLatheRecipes
     emagDynamicPacks:
     - SecurityBoards
@@ -638,9 +633,6 @@
     staticPacks:
     - BioGenIngredientsStatic
     - BioGenMaterialsStatic
-    staticRecipes:
-    - BioGenMutagen # Orehum add mutagen to biogen
-    - BioGenDiseaseSwab # Orehum add палочки to biogen
 
 - type: entity
   parent: [BaseLathe, BaseMaterialSiloUtilizer]

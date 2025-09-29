@@ -20,6 +20,8 @@
   - BioGenLeft4Zed
   - BioGenEZNutrient
   - BioGenRobustHarvest
+  - BioGenMutagen # Orehum add mutagen to biogen
+  - BioGenDiseaseSwab # Orehum add палочки to biogen
 
 - type: latheRecipePack
   id: BioGenMaterialsStatic
