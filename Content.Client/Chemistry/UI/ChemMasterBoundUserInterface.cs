@@ -32,6 +32,8 @@ namespace Content.Client.Chemistry.UI
                 new ItemSlotButtonPressedEvent(SharedChemMaster.InputSlotName));
             _window.BufferTransferButton.OnPressed += _ => SendMessage(
                 new ChemMasterSetModeMessage(ChemMasterMode.Transfer));
+            _window.PillBufferTransferButton.OnPressed += _ => SendMessage(
+                new ChemMasterSetModeMessage(ChemMasterMode.Transfer));
             _window.BufferDiscardButton.OnPressed += _ => SendMessage(
                 new ChemMasterSetModeMessage(ChemMasterMode.Discard));
             _window.PillBufferTransferButton.OnPressed += _ => SendMessage( // Orehum fix pill menu
@@ -44,6 +46,10 @@ namespace Content.Client.Chemistry.UI
             _window.CreateBottleButton.OnPressed += _ => SendMessage(
                 new ChemMasterOutputToBottleMessage(
                     (uint) _window.BottleDosage.Value, _window.LabelLine));
+            _window.BufferSortButton.OnPressed += _ => SendMessage(
+                    new ChemMasterSortingTypeCycleMessage());
+            _window.PillBufferSortButton.OnPressed += _ => SendMessage(
+                new ChemMasterSortingTypeCycleMessage());
 
             for (uint i = 0; i < _window.PillTypeButtons.Length; i++)
             {
@@ -52,7 +58,6 @@ namespace Content.Client.Chemistry.UI
             }
 
             _window.OnReagentButtonPressed += (_, button, amount, isOutput) => SendMessage(new ChemMasterReagentAmountButtonMessage(button.Id, amount, button.IsBuffer, isOutput));
-            _window.OnSortMethodChanged += sortMethod => SendMessage(new ChemMasterSortMethodUpdated(sortMethod));
             _window.OnTransferAmountChanged += amount => SendMessage(new ChemMasterTransferringAmountUpdated(amount));
             _window.OnUpdateAmounts += amounts => SendMessage(new ChemMasterAmountsUpdated(amounts));
         }

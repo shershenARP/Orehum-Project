@@ -901,6 +901,9 @@ namespace Content.Client.Lobby.UI
             SpriteViewN.SetEntity(PreviewDummy);
             SpriteViewE.SetEntity(PreviewDummy);
             SpriteViewW.SetEntity(PreviewDummy);
+
+            // Check and set the dirty flag to enable the save/reset buttons as appropriate.
+            SetDirty();
         }
 
         /// <summary>
@@ -994,6 +997,9 @@ namespace Content.Client.Lobby.UI
 
             TraitsTabs.UpdateTabMerging();
             LoadoutsTabs.UpdateTabMerging();
+
+            // Check and set the dirty flag to enable the save/reset buttons as appropriate.
+            SetDirty();
         }
 
         private void LoadoutsChanged(bool enabled)
@@ -1055,7 +1061,7 @@ namespace Content.Client.Lobby.UI
             var firstCategory = true;
             foreach (var department in departments)
             {
-                var departmentName = Loc.GetString($"department-{department.ID}");
+                var departmentName = Loc.GetString(department.Name);
 
                 if (!_jobCategories.TryGetValue(department.ID, out var category))
                 {
@@ -1175,7 +1181,6 @@ namespace Content.Client.Lobby.UI
                 return;
 
             Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithMarkings(markings.GetForwardEnumerator().ToList()));
-            SetDirty();
             ReloadProfilePreview();
         }
 
@@ -1264,7 +1269,6 @@ namespace Content.Client.Lobby.UI
                 }
             }
 
-            SetDirty();
             ReloadProfilePreview();
         }
 
@@ -1284,7 +1288,6 @@ namespace Content.Client.Lobby.UI
         {
             Profile = Profile?.WithAge(newAge);
             ReloadPreview();
-            SetDirty();
         }
 
         private void SetSex(Sex newSex)
@@ -1307,14 +1310,12 @@ namespace Content.Client.Lobby.UI
             UpdateGenderControls();
             Markings.SetSex(newSex);
             ReloadProfilePreview();
-            SetDirty();
         }
 
         private void SetGender(Gender newGender)
         {
             Profile = Profile?.WithGender(newGender);
             ReloadPreview();
-            SetDirty();
         }
 
         private void SetDisplayPronouns(string? displayPronouns)
@@ -1362,7 +1363,6 @@ namespace Content.Client.Lobby.UI
             UpdateHeightWidthSliders();
             UpdateWeight();
             UpdateSpeciesGuidebookIcon();
-            IsDirty = true;
             ReloadProfilePreview();
             ReloadClothes(); // Species may have job-specific gear, reload the clothes
         }
