@@ -7,6 +7,7 @@ using Content.Server.NPC.Components;
 using Content.Server.NPC.Events;
 using Content.Server.NPC.Pathfinding;
 using Content.Shared.CCVar;
+using Content.Shared.Climbing.Components;
 using Content.Shared.Climbing.Systems;
 using Content.Shared.CombatMode;
 using Content.Shared.Interaction;
@@ -31,6 +32,9 @@ using Robust.Shared.Utility;
 using Content.Shared.Prying.Systems;
 using Microsoft.Extensions.ObjectPool;
 using Prometheus;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Threading;
+
 
 namespace Content.Server.NPC.Systems;
 
@@ -68,12 +72,16 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedCombatModeSystem _combat = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private readonly IParallelManager _parallel = default!; // orehum
 
     private EntityQuery<FixturesComponent> _fixturesQuery;
     private EntityQuery<MovementSpeedModifierComponent> _modifierQuery;
     private EntityQuery<NpcFactionMemberComponent> _factionQuery;
     private EntityQuery<PhysicsComponent> _physicsQuery;
     private EntityQuery<TransformComponent> _xformQuery;
+    private EntityQuery<ClimbingComponent> _climbingQuery;
+    private EntityQuery<CombatModeComponent> _combatModeQuery;
+    private EntityQuery<MapGridComponent> _mapGridQuery;
 
     private ObjectPool<HashSet<EntityUid>> _entSetPool =
         new DefaultObjectPool<HashSet<EntityUid>>(new SetPolicy<EntityUid>());
@@ -95,9 +103,13 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
 
     private int _activeSteeringCount;
 
+    private SteerJob _steerJob;
+
     public override void Initialize()
     {
         base.Initialize();
+
+        _steerJob = new(this);
 
         Log.Level = LogLevel.Info;
         _fixturesQuery = GetEntityQuery<FixturesComponent>();
@@ -105,6 +117,9 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         _factionQuery = GetEntityQuery<NpcFactionMemberComponent>();
         _physicsQuery = GetEntityQuery<PhysicsComponent>();
         _xformQuery = GetEntityQuery<TransformComponent>();
+        _climbingQuery = GetEntityQuery<ClimbingComponent>();
+        _combatModeQuery = GetEntityQuery<CombatModeComponent>();
+        _mapGridQuery = GetEntityQuery<MapGridComponent>();
 
         for (var i = 0; i < InterestDirections; i++)
         {
@@ -233,34 +248,28 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         if (!_enabled)
             return;
 
-        // Not every mob has the modifier component so do it as a separate query.
-        var npcs = new (EntityUid, NPCSteeringComponent, InputMoverComponent, TransformComponent)[Count<ActiveNPCComponent>()];
+        var npcs = _steerJob.Npcs; // orehum
+        npcs.Clear(); // orehum
+        npcs.EnsureCapacity(Count<ActiveNPCComponent>()); // orehum
 
         var query = EntityQueryEnumerator<ActiveNPCComponent, NPCSteeringComponent, InputMoverComponent, TransformComponent>();
         var index = 0;
 
         while (query.MoveNext(out var uid, out _, out var steering, out var mover, out var xform))
         {
-            npcs[index] = (uid, steering, mover, xform);
+            npcs.Add((uid, steering, mover, xform)); // orehum
             index++;
         }
 
         // Dependency issues across threads.
-        var options = new ParallelOptions
-        {
-            MaxDegreeOfParallelism = 1,
-        };
-        var curTime = _timing.CurTime;
+        _steerJob.CurTime = _timing.CurTime; // orehum
+        _steerJob.FrameTime = frameTime; // orehum
 
         _activeSteeringCount = 0;
 
-        Parallel.For(0, index, options, i =>
-        {
-            var (uid, steering, mover, xform) = npcs[i];
-            Steer(uid, steering, mover, xform, frameTime, curTime);
-        });
+        _parallel.ProcessSerialNow(_steerJob, index); // orehum
 
-        ActiveSteeringGauge.Set(_activeSteeringCount);
+        //ActiveSteeringGauge.Set(_activeSteeringCount);
 
         if (_subscribedSessions.Count > 0)
         {
@@ -439,7 +448,7 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         // Thanks past sloth I already realised.
         if (targetPoly != null &&
             steering.Coordinates.Position.Equals(Vector2.Zero) &&
-            TryComp<PhysicsComponent>(uid, out var physics) &&
+            _physicsQuery.TryComp(uid, out var physics) &&
             _interaction.InRangeUnobstructed(uid, steering.Coordinates.EntityId, range: 30f, (CollisionGroup)physics.CollisionMask))
         {
             steering.CurrentPath.Clear();
@@ -491,5 +500,23 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         }
 
         return modifier.CurrentSprintSpeed;
+    }
+
+    private record struct SteerJob(NPCSteeringSystem System) : IParallelRobustJob
+    {
+        public List<(EntityUid, NPCSteeringComponent, InputMoverComponent, TransformComponent)> Npcs = new(128);
+
+        public TimeSpan CurTime;
+        public float FrameTime;
+
+        public int MinimumBatchParallel => int.MaxValue;
+
+        public int BatchSize => int.MaxValue;
+
+        public void Execute(int index)
+        {
+            var (uid, steering, mover, xform) = Npcs[index];
+            System.Steer(uid, steering, mover, xform, FrameTime, CurTime);
+        }
     }
 }

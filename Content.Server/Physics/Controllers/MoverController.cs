@@ -107,7 +107,7 @@ public sealed class MoverController : SharedMoverController
                 frameTime);
         }
 
-        ActiveMoverGauge.Set(_movers.Count);
+        //ActiveMoverGauge.Set(_movers.Count);
 
         HandleShuttleMovement(frameTime);
     }
