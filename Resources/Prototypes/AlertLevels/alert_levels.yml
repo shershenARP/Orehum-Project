@@ -69,28 +69,13 @@
       emergencyLightColor: DarkViolet
       forceEnableEmergencyLights: true
       shuttleTime: 1200
-    altdelta:
-      announcement: alert-level-delta-announcement
+    enigma:
+      announcement: alert-level-enigma-announcement
       selectable: false
-      sound:
-        path: /Audio/_EE/Supermatter/altdelta.ogg
-        params:
-          volume: -1 # ADT-Tweak
+      sound: /Audio/Announcements/AlertLevels/code_enigma.ogg # DS14 alert sound
       disableSelection: true
-      color: DarkRed
-      emergencyLightColor: Orange
+      color: '#EF7200'
+      emergencyLightColor: '#EF7200'
       forceEnableEmergencyLights: true
-      shuttleTime: 1200
-    cascade:
-      announcement: alert-level-cascade-announcement
-      selectable: false
-      sound:
-        path: /Audio/_EE/Supermatter/thecascade.ogg
-        params:
-          volume: -2
-      disableSelection: true
-      color: PaleVioletRed
-      emergencyLightColor: PaleVioletRed
-      forceEnableEmergencyLights: true
-      shuttleTime: 1200
+      shuttleTime: 240
 
