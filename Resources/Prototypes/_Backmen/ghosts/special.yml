@@ -104,3 +104,15 @@
     - state: Wend
       shader: unshaded
 
+- type: ghostTheme
+  id: AngelGhost
+  name: sponsor-win-manager-ghost-Angel
+  components:
+  - type: Sprite
+    noRot: true
+    overrideContainerOcclusion: true
+    drawdepth: Ghosts
+    sprite: Backmen/Mobs/Ghost/angel.rsi
+    layers:
+    - state: angel
+      shader: unshaded
