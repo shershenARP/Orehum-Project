@@ -2,7 +2,7 @@
   parent: [ BasePart ]
   abstract: true
   id: PartFeroxiBase
-  name: feroxi body part
+  name: часть тела ферокси
   components:
     - type: Sprite
       sprite: _DV/Mobs/Species/Feroxi/parts.rsi
@@ -10,7 +10,7 @@
 - type: entity
   parent: [ PartFeroxiBase, BaseTorso ]
   id: TorsoFeroxi
-  name: feroxi torso
+  name: тело ферокси
   components:
   - type: Sprite
     state: "torso_m"
@@ -18,7 +18,7 @@
 - type: entity
   parent: [ PartFeroxiBase, BaseHead ]
   id: HeadFeroxi
-  name: feroxi head
+  name: голова ферокси
   components:
   - type: Sprite
     state: "head_m"
@@ -26,7 +26,7 @@
 - type: entity
   parent: [ PartFeroxiBase, BaseLeftArm ]
   id: LeftArmFeroxi
-  name: left feroxi arm
+  name: левая рука ферокси
   components:
   - type: Sprite
     state: "l_arm"
@@ -34,7 +34,7 @@
 - type: entity
   parent: [ PartFeroxiBase, BaseRightArm ]
   id: RightArmFeroxi
-  name: right feroxi arm
+  name: правая рука ферокси
   components:
   - type: Sprite
     state: "r_arm"
@@ -42,7 +42,7 @@
 - type: entity
   parent: [ PartFeroxiBase, BaseLeftHand ]
   id: LeftHandFeroxi
-  name: left feroxi hand
+  name: левая ладонь ферокси
   components:
   - type: Sprite
     state: "l_hand"
@@ -50,7 +50,7 @@
 - type: entity
   parent: [ PartFeroxiBase, BaseRightHand ]
   id: RightHandFeroxi
-  name: right feroxi hand
+  name: правая ладонь ферокси
   components:
   - type: Sprite
     state: "r_hand"
@@ -58,7 +58,7 @@
 - type: entity
   parent: [ PartFeroxiBase, BaseLeftLeg ]
   id: LeftLegFeroxi
-  name: left feroxi leg
+  name: левая нога ферокси
   components:
   - type: Sprite
     state: "l_leg"
@@ -67,7 +67,7 @@
 - type: entity
   parent: [ PartFeroxiBase, BaseRightLeg ]
   id: RightLegFeroxi
-  name: right feroxi leg
+  name: правая нога ферокси
   components:
   - type: Sprite
     state: "r_leg"
@@ -76,7 +76,7 @@
 - type: entity
   parent: [ PartFeroxiBase, BaseLeftFoot ]
   id: LeftFootFeroxi
-  name: left feroxi foot
+  name: левая ступня ферокси
   components:
   - type: Sprite
     state: "l_foot"
@@ -84,7 +84,7 @@
 - type: entity
   parent: [ PartFeroxiBase, BaseRightFoot ]
   id: RightFootFeroxi
-  name: right feroxi foot
+  name: правая ступня ферокси
   components:
   - type: Sprite
     state: "r_foot"
