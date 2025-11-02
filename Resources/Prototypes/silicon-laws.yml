@@ -26,7 +26,6 @@
 - type: siliconLawset
   id: Asimov
   laws:
-  - ObeyAI
   - Asimov1
   - Asimov2
   - Asimov3
