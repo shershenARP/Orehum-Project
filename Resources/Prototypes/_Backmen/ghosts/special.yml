@@ -116,3 +116,16 @@
     layers:
     - state: angel
       shader: unshaded
+
+- type: ghostTheme
+  id: EnvoilyGhost
+  name: sponsor-win-manager-ghost-Envoily
+  components:
+  - type: Sprite
+    noRot: true
+    overrideContainerOcclusion: true
+    drawdepth: Ghosts
+    sprite: Backmen/Mobs/Ghost/Envoily.rsi
+    layers:
+    - state: kidz
+      shader: unshaded
