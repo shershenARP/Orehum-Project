@@ -10,7 +10,7 @@
   - type: Input
     context: "human"
   - type: Speech
-    speechVerb: felinid
+    speechVerb: Felinid
   - type: MobMover
   - type: InputMover
   - type: Reactive
