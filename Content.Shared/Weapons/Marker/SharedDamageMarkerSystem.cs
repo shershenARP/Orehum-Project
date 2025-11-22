@@ -229,6 +229,19 @@ public abstract class SharedDamageMarkerSystem : EntitySystem
                                 RemComp<IcyLookComponent>(target);
                             });
                         }
+
+                        if (TryComp<CrusherUpgradeCarpComponent>(upgradeEntity, out var carp))
+                        {
+                            var target = args.OtherEntity;
+                            var lifetime = (int) marker.EndTime.TotalSeconds - (int) _timing.CurTime.TotalSeconds;
+
+                            EnsureComp<CarpBloodComponent>(target);
+
+                            Timer.Spawn(TimeSpan.FromSeconds(lifetime), () =>
+                            {
+                                RemComp<CarpBloodComponent>(target);
+                            });
+                        }
                     }
                 }
             }

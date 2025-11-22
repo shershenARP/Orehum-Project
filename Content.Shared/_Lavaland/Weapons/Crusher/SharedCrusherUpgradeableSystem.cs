@@ -39,7 +39,7 @@ public sealed class CrusherUpgradeableSystem : EntitySystem
         base.Update(frameTime);
 
         var query = EntityQueryEnumerator<ItemSlotsComponent>();
-        while (query.MoveNext(out var weapon, out var slots)) // weapon = uid
+        while (query.MoveNext(out var weapon, out var slots)) 
         {
             foreach (var slot in slots.Slots.Values)
             {
@@ -91,18 +91,11 @@ public sealed class CrusherUpgradeableSystem : EntitySystem
             }
 
             magmaUpgradeFlag = false;
-
-            //if (!HasComp<CrusherUpgradeMagmaWatcherComponent>(upgradeEntity.Value))
-            //{
-
-            // }
         }
     }
 
     private void OnMagmaUpgradeRemoved(EntityUid uid, CrusherUpgradeOriginalProtoComponent comp, ComponentRemove args)
     {
-        // uid — это сущность апгрейда
-        // weapon нужно найти через слоты
         if (TryComp<BasicEntityAmmoProviderComponent>(uid, out var ammoProvider))
         {
             if (comp.OriginalProto != null)
@@ -116,29 +109,20 @@ public sealed class CrusherUpgradeableSystem : EntitySystem
 
     private void OnMeleeHit(EntityUid uid, CrusherUpgradeableComponent comp, MeleeHitEvent args)
     {
-        // Проверяем слоты оружия
         if (!TryComp(uid, out ItemSlotsComponent? slots))
             return;
 
         foreach (var slot in slots.Slots.Values)
         {
-            // Вариант 1: по имени слота
-            //var isCrestSlot = slot.Name.Equals("CrusherCrest", StringComparison.OrdinalIgnoreCase);
-
-            // Вариант 2: по тегу в whitelist (если ты его задаёшь в YAML)
             var hasCrestTag = slot.Whitelist?.Tags?.Contains("CrusherCrest") == true;
 
-            // if (!isCrestSlot && !hasCrestTag)
-            //     continue;
 
             if (!hasCrestTag) continue;
 
-            // crestEntity — то, что вставлено в слот "крестовины"
             var crestEntity = slot.Item;
             if (crestEntity is null)
                 continue;
 
-            // У "крестовины" ищем её внутренние слоты
             if (!TryComp(crestEntity.Value, out ItemSlotsComponent? crestSlots))
                 continue;
 
@@ -158,11 +142,9 @@ public sealed class CrusherUpgradeableSystem : EntitySystem
 
                     var extraDamageInt = (int) Math.Round(damageable.TotalDamage.Float() / 5.0);
 
-                    // Если у апгрейда есть хотя бы один тип урона — берём его и добавляем бонус туда же
-
                     if (goliath.Damage.DamageDict.Count > 0)
                     {
-                        var firstType = goliath.Damage.DamageDict.Keys.First(); // теперь работает
+                        var firstType = goliath.Damage.DamageDict.Keys.First();
                         var extra = new DamageSpecifier();
                         extra.DamageDict[firstType] =
                             extra.DamageDict.GetValueOrDefault(firstType) + FixedPoint2.New(extraDamageInt);
@@ -172,8 +154,15 @@ public sealed class CrusherUpgradeableSystem : EntitySystem
                     }
                     else
                     {
-                        // Если компонент пустой, можно ничего не добавлять или выбрать дефолтный тип (см. Вариант 2)
                         args.BonusDamage += goliath.Damage;
+                    }
+                }
+
+                foreach (var target in args.HitEntities)
+                {
+                    if (HasComp<CarpBloodComponent>(target) && TryComp<CrusherUpgradeCarpComponent>(upgradeEntity.Value, out var carp))
+                    {
+                        args.BonusDamage += carp.Damage;
                     }
                 }
             }

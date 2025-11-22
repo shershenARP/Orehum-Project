@@ -157,3 +157,27 @@
   - type: Tag
     tags:
     - UpgradeFight
+
+
+- type: entity
+  id: LavalandCarpCrusherUpgrade
+  parent: BaseItem
+  name: клык карпа
+  description: Пусть клыки карпов и острые, этого недостаточно для защиты от безумцев с мачете. 
+  components:
+  - type: Sprite
+    sprite: _Lavaland/Objects/Specific/Salvage/crusher_trophy.rsi
+    state: carp
+  - type: Item
+    size: Small
+  - type: CrusherUpgradeCarp
+    damage:
+      types:
+        Slash: 15
+
+  - type: StaticPrice
+    price: 750
+  - type: Tag
+    tags:
+    - UpgradeMark
+    - UpgradePassive
