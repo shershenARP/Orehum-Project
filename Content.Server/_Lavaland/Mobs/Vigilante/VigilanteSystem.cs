@@ -438,6 +438,7 @@ public sealed class VigilanteSystem : EntitySystem
 
             if (bossDamage.TotalDamage - startDamage >= 50)
             {
+                _movement.ChangeBaseSpeed(ent, 4f, 4.5f, 20f);
                 DoThrow();
             }
         }, _strangleCts.Token);
@@ -446,6 +447,7 @@ public sealed class VigilanteSystem : EntitySystem
         {
             if (ent.Comp.isStrangle)
             {
+                _movement.ChangeBaseSpeed(ent, 4f, 4.5f, 20f);
                 DoThrow();
             }
         });
